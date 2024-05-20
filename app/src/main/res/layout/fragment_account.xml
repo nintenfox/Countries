@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".Account">
+    tools:context=".view.Account">
 
     <TextView
         android:id="@+id/tv_pers_email"

@@ -1,4 +1,4 @@
-package com.ntsarenkov.countries
+package com.ntsarenkov.countries.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,13 +9,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.ntsarenkov.countries.databinding.FragmentAccountBinding
 
 class Account : Fragment() {
     private lateinit var auth: FirebaseAuth
-    private lateinit var firestore: FirebaseFirestore
     private lateinit var binding: FragmentAccountBinding
 
     override fun onCreateView(

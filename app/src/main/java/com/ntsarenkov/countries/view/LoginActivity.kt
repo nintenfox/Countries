@@ -1,4 +1,4 @@
-package com.ntsarenkov.countries
+package com.ntsarenkov.countries.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -14,6 +14,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import com.ntsarenkov.countries.R
 import com.ntsarenkov.countries.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {

@@ -1,0 +1,83 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface CountriesAPI
+
+CountriesAPI <|-- MainFragment
+
+CountryData <|- Name
+CountryData <|- Currency
+CountryData <|- Flags
+CountryData <|- Maps
+
+CountriesAdapter <|- CountryData
+CountryDetails <|- CountriesAdapter
+CountryDetailsActivity <|- CountryDetails
+MainFragment <|- CountriesAdapter
+
+MainActivity <|- MainFragment
+MainActivity <|- AccountFragment
+MainActivity <|- FavouritesFragment
+
+class AccountFragment {
+    private lateinit var auth: FirebaseAuth
+    private lateinit var binding: FragmentAccountBinding
+    }
+class LoginActivity
+class CountryDetailsActivity {
+
+    private lateinit var binding: ActivityCountryDetailsBinding
+    }
+class FavouritesFragment
+class MainFragment {
+    private lateinit var binding: FragmentMainBinding
+    private var countryArray: ArrayList<CountryData>? = null
+    private var compositeDisposable: CompositeDisposable? = null
+    private lateinit var countryAdapter: CountriesAdapter
+    }
+class CountriesAdapter{
+    private var context: Context, private var countryList: ArrayList<CountryData>
+}
+class MainActivity
+class CountryData {
+val name: Name,
+    val capital: List<String>,
+    val region: String,
+    val population: Long,
+    val currencies: Map<String, Currency>,
+    val continents: List<String>,
+    val languages: Map<String, String>,
+    val maps: Maps,
+    val flags: Flags,
+    val startOfWeek: String
+}
+
+class Name {
+    val common: String,
+    val official: String
+}
+class Currency {
+    val name: String,
+    val symbol: String
+}
+class Flags {
+    val png: String,
+    val svg: String,
+    val alt: String
+}
+class Maps {
+    val googleMaps: String,
+    val openStreetMaps: String
+}
+class CountryDetails{
+    val countryName: String,
+    val capital: String,
+    val population: Long,
+    val currency: String?,
+    val continent: String,
+    val language: Map<String, String>,
+    val maps: String,
+    val flag: String,
+    val startOfWeek: String
+}
+@enduml
