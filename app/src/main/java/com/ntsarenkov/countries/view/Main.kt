@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.ntsarenkov.countries.adapter.CountriesAdapter
 import com.ntsarenkov.countries.databinding.FragmentMainBinding
-import com.ntsarenkov.countries.model.CountryData
+import com.ntsarenkov.countries.model.AppDatabase
+import com.ntsarenkov.countries.model.CountryEntity
 import com.ntsarenkov.countries.service.CountriesAPI
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -21,24 +23,26 @@ import java.util.concurrent.TimeUnit
 
 class Main : Fragment() {
     private lateinit var binding: FragmentMainBinding
-    private var countryArray: ArrayList<CountryData>? = null
+    private var countryArray: ArrayList<CountryEntity>? = null
     private var compositeDisposable: CompositeDisposable? = null
     private lateinit var countryAdapter: CountriesAdapter
-
+    private lateinit var database: AppDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(layoutInflater)
-
+        database = AppDatabase.getDatabase(requireContext())
         compositeDisposable = CompositeDisposable()
         loadData()
+        setupSearchView()
 
         return binding.root
     }
 
     private fun loadData() {
+
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
@@ -52,7 +56,21 @@ class Main : Fragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ countryList ->
                     countryList.let {
-                        countryArray = java.util.ArrayList(countryList)
+                        val countryEntities = countryList.map { countryData ->
+                            CountryEntity(
+                                name = countryData.name.common,
+                                capital = countryData.capital.firstOrNull() ?: "N/A",
+                                population = countryData.population,
+                                currency = countryData.currencies.values.firstOrNull()?.name
+                                    ?: "N/A",
+                                continent = countryData.continents.firstOrNull() ?: "N/A",
+                                language = countryData.languages.values.joinToString { it },
+                                maps = countryData.maps.googleMaps,
+                                flag = countryData.flags.png,
+                                startOfWeek = countryData.startOfWeek
+                            )
+                        }
+                        countryArray = ArrayList(countryEntities.sortedBy { it.name })
                         setRecyclerView(countryArray!!)
                     }
                 }, { throwable ->
@@ -61,7 +79,7 @@ class Main : Fragment() {
         )
     }
 
-    private fun setRecyclerView(countryList: ArrayList<CountryData>) {
+    private fun setRecyclerView(countryList: ArrayList<CountryEntity>) {
         val recyclerView = binding.recyclerView
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
@@ -70,6 +88,32 @@ class Main : Fragment() {
         countryAdapter = context?.let { CountriesAdapter(it, countryList) }!!
         recyclerView.adapter = countryAdapter
     }
+
+    private fun setupSearchView() {
+        binding.searchView.setOnClickListener {
+            binding.searchView.isIconified = false
+        }
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterCountries(newText)
+                return true
+            }
+        })
+    }
+
+    private fun filterCountries(query: String?) {
+        val filteredList = countryArray?.filter {
+            it.name.contains(query ?: "", ignoreCase = true) ||
+                    it.capital.contains(query ?: "", ignoreCase = true) ||
+                    it.continent.contains(query ?: "", ignoreCase = true)
+        }
+        filteredList?.let { ArrayList(it) }?.let { countryAdapter.updateList(it) }
+    }
+
 
     override fun onDestroy() {
         compositeDisposable?.clear()

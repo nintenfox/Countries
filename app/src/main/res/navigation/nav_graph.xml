@@ -12,9 +12,9 @@
         tools:layout="@layout/fragment_main" />
     <fragment
         android:id="@+id/favourites"
-        android:name="com.ntsarenkov.countries.view.Favourites"
+        android:name="com.ntsarenkov.countries.view.Favorites"
         android:label="fragment_favourites"
-        tools:layout="@layout/fragment_favourites" />
+        tools:layout="@layout/fragment_favorites" />
     <fragment
         android:id="@+id/account"
         android:name="com.ntsarenkov.countries.view.Account"

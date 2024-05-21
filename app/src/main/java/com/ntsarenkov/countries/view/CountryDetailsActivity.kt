@@ -8,7 +8,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnPreDraw
 import com.ntsarenkov.countries.databinding.ActivityCountryDetailsBinding
-import com.ntsarenkov.countries.model.CountryDetails
+import com.ntsarenkov.countries.model.CountryEntity
 import com.squareup.picasso.Picasso
 import java.text.NumberFormat
 import java.util.Locale
@@ -22,12 +22,12 @@ class CountryDetailsActivity : AppCompatActivity() {
         binding = ActivityCountryDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val countryDetails = intent.getSerializableExtra("country") as CountryDetails
+        val countryDetails = intent.getSerializableExtra("country") as CountryEntity
 
         setContents(countryDetails)
     }
 
-    private fun setContents(countryDetails: CountryDetails) {
+    private fun setContents(countryDetails: CountryEntity) {
 
         Picasso.get().load(countryDetails.flag).into(binding.detailsImage)
 
@@ -39,10 +39,9 @@ class CountryDetailsActivity : AppCompatActivity() {
                 ActivityCompat.startPostponedEnterTransition(this@CountryDetailsActivity)
             }
         }
-
-        binding.countryNameTxt.text = countryDetails.countryName
+        binding.countryNameTxt.text = countryDetails.name
         binding.capitalTxt.text = countryDetails.capital
-        binding.languageTxt.text = languageConvert(countryDetails.language)
+        binding.languageTxt.text = countryDetails.language
         binding.populationTxt.text = formatNumberWithCommas(countryDetails.population)
         binding.currencyTxt.text = countryDetails.currency
         binding.continentTxt.text = countryDetails.continent
@@ -56,9 +55,5 @@ class CountryDetailsActivity : AppCompatActivity() {
     private fun formatNumberWithCommas(number: Long): String {
         val numberFormat = NumberFormat.getInstance(Locale.getDefault())
         return numberFormat.format(number)
-    }
-
-    private fun languageConvert(languages: Map<String, String>): String {
-        return languages.values.joinToString { it }
     }
 }

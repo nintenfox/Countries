@@ -4,12 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="16dp">
+    android:padding="@dimen/fab_margin"
+    tools:ignore="UseCompoundDrawables">
 
     <ImageView
         android:id="@+id/flag_image"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:scaleType="fitXY"
+        android:background="@color/md_theme_onBackground"
+        android:contentDescription="@string/flag"
+        android:padding="1dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView

@@ -3,19 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:padding="@dimen/fab_margin"
     tools:context=".view.Main">
 
-    <androidx.appcompat.widget.SearchView
+    <SearchView
         android:id="@+id/search_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:actionViewClass="android.widget.SearchView" />
+        android:inputType="text"
+        android:tooltipText="@string/textview"
+        android:queryHint="Country, Capital, Continent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp" />
 
 </LinearLayout>

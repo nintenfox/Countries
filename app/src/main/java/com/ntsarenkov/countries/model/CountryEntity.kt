@@ -1,12 +1,16 @@
 package com.ntsarenkov.countries.model
 
-data class CountryDetails(
-    val countryName: String,
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "countries")
+data class CountryEntity(
+    @PrimaryKey val name: String,
     val capital: String,
     val population: Long,
     val currency: String?,
     val continent: String,
-    val language: Map<String, String>,
+    val language: String,
     val maps: String,
     val flag: String,
     val startOfWeek: String
