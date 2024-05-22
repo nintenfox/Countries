@@ -65,6 +65,9 @@ class CountryDetailsActivity : AppCompatActivity() {
             val uri = Uri.parse(countryDetails.maps)
             startActivity(Intent(Intent.ACTION_VIEW, uri))
         }
+        if (countryDetails.isFavorite)
+            binding.favoriteButton.setImageResource(R.drawable.baseline_favorite)
+        else binding.favoriteButton.setImageResource(R.drawable.ic_favorite)
     }
 
     private fun formatNumberWithCommas(number: Long): String {
@@ -92,10 +95,10 @@ class CountryDetailsActivity : AppCompatActivity() {
     }
     private fun updateFavoriteButton(isFavorite: Boolean) {
         if (isFavorite) {
-            binding.favoriteButton.setImageResource(R.drawable.ic_delete)
+            binding.favoriteButton.setImageResource(R.drawable.baseline_favorite)
             binding.favoriteButton.contentDescription = getString(R.string.remove_from_favorites)
         } else {
-            binding.favoriteButton.setImageResource(R.drawable.ic_plus)
+            binding.favoriteButton.setImageResource(R.drawable.ic_favorite)
             binding.favoriteButton.contentDescription = getString(R.string.add_to_favorites)
         }
     }
