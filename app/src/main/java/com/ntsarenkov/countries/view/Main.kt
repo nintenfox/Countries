@@ -41,7 +41,7 @@ class Main : Fragment() {
         return binding.root
     }
 
-    private fun loadData() {
+    /*private fun loadData() {
 
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -77,6 +77,70 @@ class Main : Fragment() {
                     throwable.printStackTrace()
                 })
         )
+    }*/
+    private fun loadData() {
+        compositeDisposable?.add(
+            database.countryDao().getAllCountries()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ countryList ->
+                    if (countryList.isEmpty()) {
+                        fetchFromApi()
+                    } else {
+                        countryArray = ArrayList(countryList.sortedBy { it.name })
+                        setRecyclerView(countryArray!!)
+                    }
+                }, { throwable ->
+                    throwable.printStackTrace()
+                })
+        )
+    }
+
+    private fun fetchFromApi() {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build().create(CountriesAPI::class.java)
+
+        compositeDisposable?.add(
+            retrofit.getAllCountries()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ countryList ->
+                    val countryEntities = countryList.map { countryData ->
+                        CountryEntity(
+                            name = countryData.name.common,
+                            capital = countryData.capital.firstOrNull() ?: "N/A",
+                            population = countryData.population,
+                            currency = countryData.currencies.values.firstOrNull()?.name ?: "N/A",
+                            continent = countryData.continents.firstOrNull() ?: "N/A",
+                            language = countryData.languages.values.joinToString { it },
+                            maps = countryData.maps.googleMaps,
+                            flag = countryData.flags.png,
+                            startOfWeek = countryData.startOfWeek,
+                            translation = countryData.translations.values.joinToString { it.common }
+                        )
+                    }
+                    saveToDatabase(countryEntities)
+                    countryArray = ArrayList(countryEntities.sortedBy { it.name })
+                    setRecyclerView(countryArray!!)
+                }, { throwable ->
+                    throwable.printStackTrace()
+                })
+        )
+    }
+
+    private fun saveToDatabase(countries: List<CountryEntity>) {
+        compositeDisposable?.add(
+            io.reactivex.Completable.fromAction {
+                database.countryDao().insertAll(countries)
+            }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+        )
     }
 
     private fun setRecyclerView(countryList: ArrayList<CountryEntity>) {
@@ -97,7 +161,6 @@ class Main : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
-
             override fun onQueryTextChange(newText: String?): Boolean {
                 filterCountries(newText)
                 return true
@@ -109,11 +172,11 @@ class Main : Fragment() {
         val filteredList = countryArray?.filter {
             it.name.contains(query ?: "", ignoreCase = true) ||
                     it.capital.contains(query ?: "", ignoreCase = true) ||
-                    it.continent.contains(query ?: "", ignoreCase = true)
+                    it.continent.contains(query ?: "", ignoreCase = true) ||
+                    it.translation.contains(query ?: "", ignoreCase = true)
         }
         filteredList?.let { ArrayList(it) }?.let { countryAdapter.updateList(it) }
     }
-
 
     override fun onDestroy() {
         compositeDisposable?.clear()
