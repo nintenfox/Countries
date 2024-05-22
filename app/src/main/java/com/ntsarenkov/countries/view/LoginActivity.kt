@@ -151,7 +151,7 @@ class LoginActivity : AppCompatActivity() {
         super.onStart()
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            toast("User is signed in")
+            toast("You are signed in")
             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
         }
     }

@@ -14,5 +14,6 @@ data class CountryEntity(
     val maps: String,
     val flag: String,
     val startOfWeek: String,
-    val translation: String
+    val translation: String,
+    var isFavorite: Boolean = false
 ) : java.io.Serializable
