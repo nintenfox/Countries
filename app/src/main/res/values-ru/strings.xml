@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Страны</string>
+    <string name="sign_in_with_google">Войти через Google</string>
+    <string name="sign_out">Выход</string>
+    <string name="password">Пароль</string>
+    <string name="sign_up">Регистрация</string>
+    <string name="sign_in">Вход</string>
+    <string name="change_password">Изменить пароль</string>
+    <string name="flag">флаг</string>
+    <string name="start_of_week">Начало недели:</string>
+    <string name="enter_a_valid_password_and_try_again">Введите правильный пароль и попробуйте снова</string>
+    <string name="enter_a_valid_email_address_and_try_again">Введите корректный адрес электронной почты и попробуйте снова</string>
+    <string name="google_maps_link">Ссылка на Google карты</string>
+    <string name="add_to_favorites">Добавить в избранные</string>
+    <string name="remove_from_favorites">Удалить из избранных</string>
+    <string name="main">Главная</string>
+    <string name="favorites">Избранное</string>
+    <string name="account">Аккаунт</string>
+</resources>

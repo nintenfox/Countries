@@ -4,16 +4,16 @@
         android:id="@+id/main"
         android:enabled="true"
         android:icon="@drawable/flag"
-        android:title="Main" />
+        android:title="@string/main" />
     <item
         android:id="@+id/favourites"
         android:enabled="true"
         android:icon="@drawable/bookmark"
-        android:title="Favourites" />
+        android:title="@string/favorites" />
     <item
         android:id="@+id/account"
         android:enabled="true"
         android:icon="@drawable/account"
-        android:title="Account" />
+        android:title="@string/account" />
 
 </menu>

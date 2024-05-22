@@ -81,8 +81,8 @@ class CountryDetailsActivity : AppCompatActivity() {
                 .subscribe({
                     Toast.makeText(
                         this,
-                        if (country.isFavorite) "Added to Favorites" else "Removed from Favorites",
-                        Toast.LENGTH_SHORT
+                        if (country.isFavorite) "Added to Favorites"
+                        else "Removed from Favorites", Toast.LENGTH_SHORT
                     ).show()
                     updateFavoriteButton(country.isFavorite)
                 }, { throwable ->
@@ -90,7 +90,6 @@ class CountryDetailsActivity : AppCompatActivity() {
                 })
         )
     }
-
     private fun updateFavoriteButton(isFavorite: Boolean) {
         if (isFavorite) {
             binding.favoriteButton.setImageResource(R.drawable.ic_delete)

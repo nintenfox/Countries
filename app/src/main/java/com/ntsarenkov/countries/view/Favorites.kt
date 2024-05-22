@@ -31,7 +31,6 @@ class Favorites : Fragment() {
         loadFavoriteCountries()
         return binding.root
     }
-
     private fun loadFavoriteCountries() {
         compositeDisposable?.add(
             database.countryDao().getAllCountries()
@@ -45,7 +44,6 @@ class Favorites : Fragment() {
                 })
         )
     }
-
     private fun setRecyclerView(countryList: ArrayList<CountryEntity>) {
         val recyclerView = binding.recyclerView
         recyclerView.layoutManager =
