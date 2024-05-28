@@ -41,43 +41,6 @@ class Main : Fragment() {
         return binding.root
     }
 
-    /*private fun loadData() {
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build().create(CountriesAPI::class.java)
-
-        compositeDisposable?.add(
-            retrofit.getAllCountries()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ countryList ->
-                    countryList.let {
-                        val countryEntities = countryList.map { countryData ->
-                            CountryEntity(
-                                name = countryData.name.common,
-                                capital = countryData.capital.firstOrNull() ?: "N/A",
-                                population = countryData.population,
-                                currency = countryData.currencies.values.firstOrNull()?.name
-                                    ?: "N/A",
-                                continent = countryData.continents.firstOrNull() ?: "N/A",
-                                language = countryData.languages.values.joinToString { it },
-                                maps = countryData.maps.googleMaps,
-                                flag = countryData.flags.png,
-                                startOfWeek = countryData.startOfWeek
-                            )
-                        }
-                        countryArray = ArrayList(countryEntities.sortedBy { it.name })
-                        setRecyclerView(countryArray!!)
-                    }
-                }, { throwable ->
-                    throwable.printStackTrace()
-                })
-        )
-    }*/
     private fun loadData() {
         compositeDisposable?.add(
             database.countryDao().getAllCountries()
@@ -85,6 +48,7 @@ class Main : Fragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ countryList ->
                     if (countryList.isEmpty()) {
+                        binding.progressBar.visibility = View.VISIBLE
                         fetchFromApi()
                     } else {
                         countryArray = ArrayList(countryList.sortedBy { it.name })
@@ -125,6 +89,7 @@ class Main : Fragment() {
                     }
                     saveToDatabase(countryEntities)
                     countryArray = ArrayList(countryEntities.sortedBy { it.name })
+                    binding.progressBar.visibility = View.GONE
                     setRecyclerView(countryArray!!)
                 }, { throwable ->
                     throwable.printStackTrace()
